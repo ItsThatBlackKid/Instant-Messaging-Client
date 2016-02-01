@@ -1,0 +1,122 @@
+Index: src/Server.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/Server.java	(revision )
++++ src/Server.java	(revision )
+@@ -15,10 +15,12 @@
+  */
+ public class Server extends JFrame {
+     ServerSocket serverSide;
+-
++    ObjectOutputStream output;
++    ObjectInputStream input;
+     JTextArea chatArea = new JTextArea();
+     Messages messages = new Messages();
+     Clients clients = new Clients();
++    final String currentID = "0.1";
+ 
+     public static void main(String[] args) {
+         new Server();
+@@ -58,7 +60,7 @@
+         }
+     }
+ 
+-    void showMessage(String message) {
++    private void showMessage(String message) {
+         SwingUtilities.invokeLater(new Runnable() {
+             @Override
+             public void run() {
+@@ -67,18 +69,7 @@
+         });
+     }
+ 
+-    void sendMessage(String message) {
+-        try {
+-            output.writeObject("SERVER: " + message);
+-            output.flush();
+-            showMessage("SERVER: " + message);
+-        } catch (IOException i) {
+-            showMessage("UNABLE TO SEND... PLEASE TRY AGAIN \n");
+-        }
+-    }
+-
+-
+-        class Clients extends JPanel {
++    class Clients extends JPanel {
+         JLabel clientIMG[] = new JLabel[5];
+ 
+         void showImages() {
+@@ -99,20 +90,7 @@
+         }
+     }
+ 
+-    private void addListeners() {
+-        messages.sendBtn.addActionListener(new ActionListener() {
+-            @Override
+-            public void actionPerformed(ActionEvent e) {
+-
+-            }
+-        });
+-    }
+-
+-
+-
+     class Messages extends JPanel {
+-        JTextField msgBox;
+-        JButton sendBtn;
+ 
+         final int h = 30;
+ 
+@@ -122,19 +100,41 @@
+             setBackground(Color.lightGray);
+             setForeground(Color.white);
+ 
+-            msgBox = new JTextField();
+-            sendBtn = new JButton("Send");
++            JTextField textField = new JTextField();
++            textField.addActionListener(new ActionListener() {
++                @Override
++                public void actionPerformed(ActionEvent e) {
++                    sendMessage(e.getActionCommand());
++                }
++            });
++            textField.setPreferredSize(new Dimension(400, h));
+ 
+-            add(msgBox);
+-            add(sendBtn);
++            JButton sendButton = new JButton("Send");
++            sendButton.setPreferredSize(new Dimension(100, h));
++            sendButton.addActionListener(new ActionListener() {
++                @Override
++                public void actionPerformed(ActionEvent e) {
++                    String toSend = textField.getText();
++                    sendMessage(toSend);
+-        }
++                }
++            });
+ 
++            add(textField);
++            add(sendButton);
+         }
++
++        void sendMessage(String message) {
++            try {
++                output.writeObject("SERVER: " + message);
++                output.flush();
++                showMessage("SERVER: " + message);
++            } catch (IOException i) {
++                showMessage("UNABLE TO SEND... PLEASE TRY AGAIN \n");
+-    }
++            }
++        }
++    }
+ 
+     class ClientThread extends Thread {
+-       ObjectOutputStream output;
+-        ObjectInputStream input;
+ 
+         private int numOfClients = 0;
+ 
+\ No newline at end of file
