@@ -21,7 +21,7 @@ public class Server extends JFrame {
 
 
     final String currentID = "0.1";
-    int numOfClients = 1;
+    int numOfClients = 0;
 
     ArrayList<ClientThread> clientThreads = new ArrayList<ClientThread>();
 
