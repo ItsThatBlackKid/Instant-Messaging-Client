@@ -10,10 +10,10 @@ Mac OSX & Linux:
 
 2. Open terminal and enter: 
     cd "[PATH_TO_PROJECT]" 
-    javac Server.java
+    javac ChatWindow.java
 
 3. Once the the file has been compiled, enter: 
-    java Server
+    java ChatWindow
     
 Windows: 
 
@@ -21,7 +21,7 @@ Windows:
 
 2. Open up Command Prompt and enter: 
     cd "[PATH_TO_PROJECT]"
-    cd javac Server.jav 
+    cd javac ChatWindow.jav
     
 3. Once the files have been compiled, enter: 
-    java Server 
+    java ChatWindow
